@@ -15,29 +15,73 @@ const conn = mysql.createConnection({
     user:'root', 
     password:'Sen@iDev77!.', 
     database:'livraria', 
-    port:3306
+    port:3306,
 })
 
 // conectar o banco de dados
 conn.connect((err)=>{
     if(err){
-      console.log(err.stack)
+      return console.log(err.stack);
     }
     console.log("Mysql conectado")
-    // app.listen(PORT, ()=>{
-    //     console.log("Servidor on PORT"+PORT)
-    // })
+    
 }) // connect vai receber uma função callback  
 
 app.get("/livros", (request, response)=>{
-    response.send("Olá, mundo!")
+    // query para banco 
+    const sql = 'SELECT * FROM livros' // instrução do banco de dados
+    conn.query(sql, (err, data)=>{
+        if(err){
+            response.status(500).json({message:"Erro o buscar os livros"})
+            return console.log(err)// dá o console no erro, para saber qual erro estara lidando
+
+        }
+        const livros = data 
+        // console.log(data)
+        // console.log(typeof data) // typeof - vai dizer que tipo é a variavel *se string, numerico, boolean
+        response.status(200).json(livros)
+    }) // essq eury é uma função que recebe dois paramentros. Na callback sempre retorna se erro e se não de erro as informações(data)
+    
 
 })
 
 // rota 404
-app.use((request, response)=>{
-    response.status(404).json({message:"Rota não encontrada"})
-})
+app.post("/livros",(request, response)=>{
+    // response.status(404).json({message:"Rota não encontrada"})
+   const {titulo, autor, ano_publicacao, genero, preco, disponibilidade} = request.body;  
+
+   if(!titulo){
+     response.status(400).json({message:"O titulo é obrigatorio"})
+     return
+   }
+   if(!autor){
+    response.status(400).json({message:"O autot é obrigatorio"})
+    return
+   }
+   if(!ano_publicacao){
+    response.status(400).json({message:"O ano publicação é obrigatório"})
+    return
+   }
+   if(!preco){
+    response.status(400).json({message:"O preço é obrigatório"})
+    return
+   }
+  
+  // cadastrar um livro -> antes preciso saber se esse livro existe 
+  const checkSql = `SELECT * FROM livros WHERE titulo ="${titulo}" AND autor = "${autor}" AND ano_publicacao = "${ano_publicacao}"`
+  conn.query(checkSql, (err, data)=>{
+   if(err){
+    response.status(500).json({message:"Erro ao buscar livros"})
+    return console.log(err); 
+   }
+    
+   if(data.length > 0){
+    response.status(409).json({message: "Livro já existe na livraria"}); 
+    return console.log(err); 
+   }
+
+  }); 
+}); 
 
 app.listen(PORT, ()=>{
     console.log("Servidor on PORT"+PORT)
