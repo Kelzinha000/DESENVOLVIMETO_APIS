@@ -102,6 +102,18 @@ app.post("/livros",(request, response)=>{
   }); 
 }); 
 
+app.get('/livros/:id', (request, response)=>{
+    const {id} = request.params
+})
+app.put('/livros/:id', (request, response)=>{
+    const {id} = request.params
+})
+app.post('/livros/:id', (request, response)=>{
+    const {id} = request.params
+})
+
+
+
 app.listen(PORT, ()=>{
     console.log("Servidor on PORT"+PORT)
 })
