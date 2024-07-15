@@ -18,7 +18,7 @@ const conn = mysql.createConnection({
     port:3306,
 })
 
-// conectar o banco de dados
+// variavel conn (conexão) vai conectar o banco de dados
 conn.connect((err)=>{
     if(err){
       return console.log(err.stack);
@@ -29,8 +29,8 @@ conn.connect((err)=>{
 
 app.get("/livros", (request, response)=>{
     // query para banco 
-    const sql = 'SELECT * FROM livros' // instrução do banco de dados
-    conn.query(sql, (err, data)=>{
+    const sql = /*SQL*/`SELECT * FROM livros` // instrução do banco de dados
+    conn.query(sql, (err, data)=>{ // consulta para buscar erro
         if(err){
             response.status(500).json({message:"Erro o buscar os livros"})
             return console.log(err)// dá o console no erro, para saber qual erro estara lidando
@@ -49,7 +49,7 @@ app.get("/livros", (request, response)=>{
 app.post("/livros",(request, response)=>{
     // response.status(404).json({message:"Rota não encontrada"})
    const {titulo, autor, ano_publicacao, genero, preco, disponibilidade} = request.body;  
-
+   // validades
    if(!titulo){
      response.status(400).json({message:"O titulo é obrigatorio"})
      return
@@ -61,6 +61,9 @@ app.post("/livros",(request, response)=>{
    if(!ano_publicacao){
     response.status(400).json({message:"O ano publicação é obrigatório"})
     return
+   }if(!genero){
+    response.status(400).json({message:"O genero é obrigatório"})
+    return
    }
    if(!preco){
     response.status(400).json({message:"O preço é obrigatório"})
@@ -68,7 +71,9 @@ app.post("/livros",(request, response)=>{
    }
   
   // cadastrar um livro -> antes preciso saber se esse livro existe 
-  const checkSql = `SELECT * FROM livros WHERE titulo ="${titulo}" AND autor = "${autor}" AND ano_publicacao = "${ano_publicacao}"`
+  const checkSql = /*sql*/  `SELECT * FROM livros WHERE titulo ="${titulo}" AND
+   autor = "${autor}" AND 
+   ano_publicacao = "${ano_publicacao}"`
   conn.query(checkSql, (err, data)=>{
    if(err){
     response.status(500).json({message:"Erro ao buscar livros"})
@@ -79,7 +84,21 @@ app.post("/livros",(request, response)=>{
     response.status(409).json({message: "Livro já existe na livraria"}); 
     return console.log(err); 
    }
+ 
+   const id = uuidv4()
+   const disponibilidade = 1
 
+   // inserir dados
+   const insertSql = /*sql*/ `INSERT INTO livros 
+   (id, titulo, autor, ano_publicacao, genero, preco, disponibilidade)
+   VALUES ("${id}}","${titulo}}","${autor}","${ano_publicacao}","${genero}","${preco}","${disponibilidade}")` 
+ 
+ conn.query(insertSql, (err)=>{
+    if(err){
+        response.status(500).json({message:"Erro ao cadastrar livro"}); 
+    }
+    response.status(201).json({message:"Livro cadastrado"})
+ })
   }); 
 }); 
 
