@@ -33,7 +33,7 @@ app.get("/livros", (request, response)=>{
     conn.query(sql, (err, data)=>{ // consulta para buscar erro
         if(err){
             response.status(500).json({message:"Erro o buscar os livros"})
-            return console.log(err)// dá o console no erro, para saber qual erro estara lidando
+            return console.err(err)// dá o console no erro, para saber qual erro estara lidando
 
         }
         const livros = data 
@@ -76,7 +76,7 @@ app.post("/livros",(request, response)=>{
    ano_publicacao = "${ano_publicacao}"`
   conn.query(checkSql, (err, data)=>{
    if(err){
-    response.status(500).json({message:"Erro ao buscar livros"})
+    response.status(500).json({message:"Erro ao casdastar livros"})
     return console.log(err); 
    }
     
@@ -91,7 +91,7 @@ app.post("/livros",(request, response)=>{
    // inserir dados
    const insertSql = /*sql*/ `INSERT INTO livros 
    (id, titulo, autor, ano_publicacao, genero, preco, disponibilidade)
-   VALUES ("${id}}","${titulo}}","${autor}","${ano_publicacao}","${genero}","${preco}","${disponibilidade}")` 
+   VALUES ("${id}","${titulo}","${autor}","${ano_publicacao}","${genero}","${preco}","${disponibilidade}")` 
  
  conn.query(insertSql, (err)=>{
     if(err){
@@ -102,14 +102,104 @@ app.post("/livros",(request, response)=>{
   }); 
 }); 
 
+//Listar um livro
 app.get('/livros/:id', (request, response)=>{
     const {id} = request.params
+
+    const sql = /*sql*/ `SELECT * FROM livros WHERE id = "${id}"` 
+    conn.query(sql,(err,data)=>{
+        if(err){
+            console.log.error(err)
+            response.status(500).json({message:"Erro ao buscar livro"})
+            return
+        }
+       // se livro retornar 0, é um arry vazio , livro não encontrado 
+        if(data.length === 0){
+            response.status(404).json({message:"Livro não encontrado"})
+        }
+        const livro = data[0]
+        response.status(200).json(livro)
+    })
 })
+app.get('/livros/:id', (request, response)=>{
+    const {id} = request.params
+    const {titulo, autor, ano_publicacao, genero, preco, disponibilidade} = request.body
+   // validações
+   if(!titulo){
+    response.status(400).json({message:"O titulo é obrigatorio"})
+    return
+  }
+  if(!autor){
+   response.status(400).json({message:"O autot é obrigatorio"})
+   return
+  }
+  if(!ano_publicacao){
+   response.status(400).json({message:"O ano publicação é obrigatório"})
+   return
+  }if(!genero){
+   response.status(400).json({message:"O genero é obrigatório"})
+   return
+  }
+  if(!preco){
+   response.status(400).json({message:"O preço é obrigatório"})
+   return
+  } if (disponibilidade == undefined){ // não poderia ser 0 pq no banco de dado é representado como falso, nesse caso se usa underfined que tem o valor de zero
+    response.status(400).json({message:"Opreco é obrigatório"}); 
+    return
+  }
+
+  const checkSql = /*sql*/ `    SELECT * FROM livro WHERE id = "${id}"`
+  conn.query(checkSql, (err, data)=>{
+    if(err){
+        console.error(err)
+        response.status(500).json({message:"Erro ao buscar livros "})
+    }
+
+    if(data.length === 0){
+        return response.status(404).json({message:"Livro não encontrado"})
+    }
+  
+   
+  })
+
+})
+//  consulta SQL para atualizar livro
 app.put('/livros/:id', (request, response)=>{
     const {id} = request.params
+    const updateSql = /*sql*/ `UPDATE livros SET titulo = "${titulo}", autor ="${autor}",
+    ano_publicacao = "${ano_publicacao}", genero = "${genero}", preco = "${preco}",
+     disponibilidade = "{disponibilidade}" 
+     WHERE id = "${id}"
+   `
+
+    conn.query(updateSql, (err)=>{
+       if(err){
+           console.error(err)
+           response.status(500).json({message:"Erro ao atualizar livro"})
+       }
+       response.status(200).json({message:"Livro atualizado"})
+   })
 })
-app.post('/livros/:id', (request, response)=>{
-    const {id} = request.params
+app.delete('/livros/:id', (request, response)=>{
+    const {id} = request.params; 
+
+    const deleteSql = /* sql */ `DELETE FROM livros WHERE id="${id}"`
+    conn.query(deleteSql, (err, info)=>{
+        if(err){
+            response.status(500).json({message:"Erro ao deletar livro"})
+            return
+        }
+       //console.log(info)
+       if(info.affectedRows === 0){
+           response.status(404).json({message:"Livro não encontrado"})
+           return   
+    }
+
+        response.status(200).json({mesage:"Livro selecionado foi deletado"})
+    })
+    app.use('/livros/:id', (request, response)=>{
+        const {id} = request.params
+    })
 })
 
 
