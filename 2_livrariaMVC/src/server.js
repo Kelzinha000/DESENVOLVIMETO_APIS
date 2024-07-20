@@ -6,10 +6,25 @@ import conn from "./config/conn.js"
 
 // importação dos modulos e criação das tabelas 
 import "./models/livroModel.js"
+import "./models/funcionarioModel.js"
 
-const PORT = process.env.PORT
+// importação das ROTAS
+import livroRoutes from "./routes/livroRoutes.js"
 
-const app = express()
+const PORT = process.env.PORT;
+
+const app = express() 
+
+
+app.use(express.urlencoded({extended : true}));
+app.use(express.json())
+
+// Utilização das rotas
+// http://localhost:3333/livros
+app.use('/livros', livroRoutes); 
+app.use('/clientes',clienteRoutes )
+
+// app.use("/funcionarios", funcionarioRoutes)
 
 app.get("/", (request, response)=>{
     response.send('Olá, Mundo!')

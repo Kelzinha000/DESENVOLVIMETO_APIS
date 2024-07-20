@@ -10,7 +10,7 @@ genero VARCHAR (255) NOT NULL,
 preco DECIMAL(10,2) NOT NULL, 
 disponibilidade BOOLEAN, 
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-updated_at TIMESTAMP CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 
 );
 
@@ -24,5 +24,4 @@ console.log(result)
  console.log(field)
 
 console.log("Tabela [livros] criada com sucesso")
-
 })
