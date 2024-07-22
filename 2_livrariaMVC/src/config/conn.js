@@ -1,7 +1,8 @@
 import "dotenv/config"
 import mysql from "mysql2"
-
-const conn = mysql.createConnection({
+                   //createConnection  
+const conn = mysql.createPool({
+    connectionLimit: 10, /// limite de conexão 
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
@@ -10,11 +11,12 @@ const conn = mysql.createConnection({
 
 });
 
-conn.connect((err) => {
-    if (err) {
-        return console.error(err.stack)
-    }
-    console.log("Mysql conectado")
-})
+/// o create pool não precisa dessa instrução para funcionar
+// conn.connect((err) => {
+//     if (err) {
+//         return console.error(err.stack)
+//     }
+//     console.log("Mysql conectado")
+// })
 
 export default conn; 

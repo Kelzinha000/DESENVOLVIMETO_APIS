@@ -1,6 +1,8 @@
 import router from 'express'
 
 const router = Router()
-import {getClientes, cadastrarClientes} from '../controllers/clientesController.js'
+import {getClientes, criarClientes} from '../controllers/clientesController.js'
 router.get('/', getClientes)
-router.post('/criar', cadastrarClientes)
+router.post('/criar',criarClientes)
+
+export default router; 
