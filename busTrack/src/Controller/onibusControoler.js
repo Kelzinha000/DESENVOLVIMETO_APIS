@@ -65,3 +65,31 @@ conn.query(insertSql, insertData, (err)=>{
 }); 
 }
 
+export const buscaronibus = (request, response)=>{
+    const {id}= request.params
+    const {nome, data_nascimento, numero_habilitacao} = request.body;
+    if(!nome){
+        response.status(400).json({message:"O nome da linha é obrigatorio"})
+        return
+        } if(!data_nascimento){
+        response.status(400).json({message:"O data_nascimento é obrigatorio"})
+        return
+        } if(!numero_habilitacao){
+        response.status(400).json({message:"O numero_habilitacao é obrigatório"})
+        return
+        }
+
+    const buscarOnibusId = /*sql*/ `SELECT FROM linhas WHERE motorista_id= "${id}"`
+
+    conn.query(buscarOnibusId, (err ,data)=>{
+     if(err){
+        response.status(404).json({message:"motorista encontrada"})
+     }
+     if(data === 0){
+        response.status(409).json({message:"motorista não encontradae"})
+     }
+    
+    })
+    
+}
+

@@ -16,13 +16,17 @@ import onibusRoutes from './Routes/onibusRoutes.js'
 
 
 const PORT = process.env.PORT
-const app = express()
-app.use(express.urlencoded({extended : true}));
-app.use(express.json())
 
-app.use('/linhas',linhasRoutes )
+const application = express()
+application.use(express.urlencoded({extended : true}));
+application.use(express.json())
+
+application.use('/linhas',linhasRoutes )
+application.use('/motorista', motoristaRoutes)
+application.use('/motorista', onibusRoutes)
 
 
-app.listen(PORT, ()=>{
+
+application.listen(PORT, ()=>{
     console.log(`Servidor on PORT`+PORT)
 })

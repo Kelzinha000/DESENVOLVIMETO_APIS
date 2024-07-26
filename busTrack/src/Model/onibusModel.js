@@ -2,11 +2,11 @@ import conn from "../Config/conn.js"
 
     const tableOnibus = /*sql*/`
     CREATE TABLE IF NOT EXISTS onibus(
-        onibus_id int primary key auto_increment, 
-        placa varchar(255) not null, 
-        modelo varchar(255) not null, 
-        ano_fabricação year(4) not null, 
-        capacidade int  not null, 
+        onibus_id INT PRIMARY KEY AUTO_INCREMENT, 
+        placa VARCHAR(255) NOT NULL, 
+        modelo VARCHAR(255) NOT NULL, 
+        ano_fabricação YEAR(4) NOT NULL, 
+        capacidade INT NOT NULL, 
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );

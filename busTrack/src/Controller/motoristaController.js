@@ -41,12 +41,13 @@ conn.query(checkSql,checkSqlData, (err, data)=>{
     response.status(409).json({message: "esse motorista já existe"}); 
     return console.log(err); 
     }
-
+    
+  
 // inserir dados/ cadastro
     const insertSql = /*sql*/ `INSERT INTO motorista
     (??, ??, ??, ??, ??, ??, ??) VALUES (?,?,?,?,?,?,?)` 
 
-const insertData = ["nome", "numero_habilitacao", "data_nascimento", nome, numero_habilitacao, data_nascimento ]
+const insertData = ["nome", "numero_habilitacao", "data_nascimento", nome, numero_habilitacao, data_nascimento]
 // as colunas vão ser representadas por "??", os valores são representados por "?"
                     // adiciona a instrução insertData 
 conn.query(insertSql, insertData, (err)=>{
@@ -58,3 +59,44 @@ conn.query(insertSql, insertData, (err)=>{
 }); 
 }
 
+export const buscarMotorista = ()=>{
+    const {id}= request.params
+    const {nome, data_nascimento, numero_habilitacao} = request.body;
+    if(!nome){
+        response.status(400).json({message:"O nome da linha é obrigatorio"})
+        return
+        } if(!data_nascimento){
+        response.status(400).json({message:"O data_nascimento é obrigatorio"})
+        return
+        } if(!numero_habilitacao){
+        response.status(400).json({message:"O numero_habilitacao é obrigatório"})
+        return
+        }
+
+    const buscarMotoristaId = /*sql*/ `SELECT FROM linhas WHERE motorista_id= "${id}"`
+
+    conn.query(buscarMotoristaId, (err ,data)=>{
+     if(err){
+        response.status(404).json({message:"motoristanão encontrada"})
+     }
+     if(data === 0){
+        response.status(409).json({message:"motorista não encontradae"})
+     }
+    
+    })
+    
+}
+
+
+export const deleteMotorista =()=>{
+    const {id}  = request.params
+    
+    const deleteSql = /*sql*/ `SELECT FROM linhas WHERE motorista="${id}"`
+    conn.query(deleteSql,(err)=>{
+        if(err){
+            response.status(500).json({message:"Erro ao deletar motorista"})
+        }
+        response.status(200).json({message:"motorista deletado"})
+    } )
+
+}

@@ -2,10 +2,10 @@ import conn from "../Config/conn.js"
 
     const tableMotorista = /*sql*/`
     CREATE TABLE IF NOT EXISTS motorista(
-        motorista_id int primary key auto_increment, 
-        nome varchar(255) not null, 
-        numero_habilitacao varchar(255) not null, 
-        data_nascimento varchar(255) not null, 
+        motorista_id INT PRIMARY KEY AUTO_INCREMENT, 
+        nome VARCHAR(255) NOT NULL, 
+        numero_habilitacao VARCHAR(255) NOT NULL, 
+        data_nascimento DATE NOT NULL, 
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
