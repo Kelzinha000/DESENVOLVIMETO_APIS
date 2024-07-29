@@ -5,10 +5,23 @@
     import conn from "./Config/conn.js"
 
     const PORT = process.env.PORT;
-
+    const app = express();
     // importação dos módulos (tabela)
     import "./Models/usuarioModel.js"
-    const app = express();
+
+    // importar as rotas 
+    import usuarioRouter from './Routes/usuarioRoute.js'
+    
+    app.use(express.urlencoded({extended:true})) // trabalhar com imagens
+    app.use(express.json())
+    // utilizar a rota
+    app.use('/usuarios', usuarioRouter)
+
+
+   
+
+
+
     //404 
     app.use((request, response)=>{
         response.status(404).json({message: "Recurso não encntrado"})
