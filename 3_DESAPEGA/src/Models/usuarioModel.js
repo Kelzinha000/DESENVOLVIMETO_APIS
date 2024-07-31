@@ -11,12 +11,12 @@ const tableUsuarios = /*sql*/ `
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );
+`;
 
- `
-   conn.query(tableUsuarios, (err)=>{
-    if(err){
-        console.error(err)
-        return
+    conn.query(tableUsuarios, (err) => {
+    if (err) {
+        console.error(err);
+        return;
     }
-    console.log("Tabela de [usuarios] criado com sucesso" )
-   })     
+    console.log("Tabela de [usuarios] criado com sucesso");
+    });
