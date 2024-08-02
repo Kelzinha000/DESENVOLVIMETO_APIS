@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express, { request, response } from "express";
-
+import path from "node:path"
+import { fileURLToPath } from "node:url";
 // importar conexão
 import conn from "./Config/conn.js";
 
@@ -12,8 +13,16 @@ import "./Models/usuarioModel.js";
 // importar as rotas
 import usuarioRouter from "./Routes/usuarioRoute.js";
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// upload de imagem, passar data e arquivo que é a imagem 
 app.use(express.urlencoded({ extended: true })); // trabalhar com imagens
 app.use(express.json());
+
+
+// localizar onde está a pasta public
+app.use("/public", express.static(path.join(__dirname, "public")))
 // utilizar a rota
 app.use("/usuarios", usuarioRouter);
 
