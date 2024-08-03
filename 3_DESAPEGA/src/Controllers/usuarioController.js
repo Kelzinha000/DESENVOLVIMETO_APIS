@@ -198,6 +198,13 @@ export const editUser = async (request, response)=>{
     const user = await getUserByToken(token)
     // console.log(user)
     const {nome, email, telefone} = request.body
+    // adicionar imagem ao objeto 
+    let imagem = user.imagem
+    if(request.file){
+      imagem = request.file.filename
+    }
+
+
     if(!nome){
       return response.status(400).json({message :"O nome é obrigado"})
     }
@@ -234,8 +241,8 @@ export const editUser = async (request, response)=>{
           }
 
           const updateSql = /*sql*/`UPDATE usuarios SET ? WHERE ?? = ? `
-          const updateData = [{nome, email, telefone}, "usuarios_id", id]
-          conn.query(updateSql, checkData, (err)=>{
+          const updateData = [{nome, email, telefone, imagem}, "usuarios_id", id]
+          conn.query(updateSql, updateData, (err)=>{
             if(err){
               console.error(err)
               response.status(500).json({err: "Erro ao atualizar usuário"})
@@ -249,6 +256,11 @@ export const editUser = async (request, response)=>{
   
     })
   }catch(error){
-    response.status(500).json({err:error})
+    console.error(error)
+    response.
+    status(error.status || 500).
+    json({
+      messgae: error.message || "Errro interno no servidor"
+    })
   }
-}
+};

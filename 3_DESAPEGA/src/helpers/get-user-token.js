@@ -29,4 +29,4 @@ return new Promise((resolve, reject)=>{
 })
 }
 
-export default getUserByToken
+export default getUserByToken; 

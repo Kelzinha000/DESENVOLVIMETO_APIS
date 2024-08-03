@@ -9,9 +9,13 @@ const PORT = process.env.PORT;
 const app = express();
 // importação dos módulos (tabela)
 import "./Models/usuarioModel.js";
+import "./Models/objetoModel.js"
+import "./Models/objetoImagesModel.js"
 
 // importar as rotas
 import usuarioRouter from "./Routes/usuarioRoute.js";
+import obejetoRouter from "./Routes/ObjetoRouter.js"
+
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -25,10 +29,11 @@ app.use(express.json());
 app.use("/public", express.static(path.join(__dirname, "public")))
 // utilizar a rota
 app.use("/usuarios", usuarioRouter);
+app.use("/objetos");
 
 //404
 app.use((request, response) => {
-  response.status(404).json({ message: "Recurso não encntrado" });
+  response.status(404).json({ message: "Recurso não encontrado" });
 });
 // 404
 // app.get("*", (request, response) => {
