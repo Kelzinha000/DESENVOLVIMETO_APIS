@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, { request, response } from "express";
 import path from "node:path"
 import { fileURLToPath } from "node:url";
+import cors from "cors";
 // importar conexão
 import conn from "./Config/conn.js";
 
@@ -27,6 +28,11 @@ app.use(express.json());
 
 // localizar onde está a pasta public
 app.use("/public", express.static(path.join(__dirname, "public")))
+//CORS
+app.use(cors({
+  origin: 'http://localhost:5372'
+}))
+
 // utilizar a rota
 app.use("/usuarios", usuarioRouter);
 app.use("/objetos");

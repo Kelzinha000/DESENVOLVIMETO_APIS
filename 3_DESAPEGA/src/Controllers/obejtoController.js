@@ -1,6 +1,6 @@
     import conn from "../Config/conn.js";
     import { v4 as uuidv4 } from "uuid";
-    import g-etToken from "../helpers/get-token.js";
+    import getToken from "../helpers/get-token.js";
     // import getUserByToken from "../helpers/get-user-token.js";
     import getUserByToken from "./usuarioController.js";
 import { request, response } from "express";
@@ -98,7 +98,8 @@ import { request, response } from "express";
             obj.peso,
             obj.cor,
             obj.descricao,
-            GROUP_CONCAT(obj_img.image_path SEPARATOR ',') AS image_path
+            obj_img.image_path,
+            -- GROUP_CONCAT(obj_img.image_path SEPARATOR ',') AS image_path
             FROM 
                 objetos AS obj
            LEFT JOIN 
@@ -115,10 +116,24 @@ import { request, response } from "express";
                     response.status(500).json({err:"Erro ao buscar objeto"})
                     return
                 }
-                const objetoUsuario = datarespose
-                .status(200).json(objetoUsuario)
+                const objetoUsuario = data.map((objeto)=>{
+                objeto_id: objeto.objeto_id;
+                usuario_id: objeto.usuario_id; 
+                nome: objeto.nome; 
+                peso: objeto.peso;
+                cor: objeto.cor; 
+                descricao: objeto.descricao; 
+                image_paths: objeto.image.image_path.split(',')
+
+
+
+                })
+                // const objetoUsuario = datarespose
+                 response.status(200).json(objetoUsuario)
            })
         }catch(error){
-
+        response.status(500).json({err:"Error ao processar a requisição"})
         }
+
+        // buscar um objeto pelo id
     }
