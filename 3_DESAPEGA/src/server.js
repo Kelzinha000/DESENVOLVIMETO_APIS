@@ -15,7 +15,7 @@ import "./Models/objetoImagesModel.js"
 
 // importar as rotas
 import usuarioRouter from "./Routes/usuarioRoute.js";
-import obejetoRouter from "./Routes/ObjetoRouter.js"
+import objetoRouter from "./Routes/objetoRouter.js"
 
 
 const __filename = fileURLToPath(import.meta.url)
@@ -35,7 +35,7 @@ app.use(cors({
 
 // utilizar a rota
 app.use("/usuarios", usuarioRouter);
-app.use("/objetos");
+app.use("/objetos",objetoRouter );
 
 //404
 app.use((request, response) => {

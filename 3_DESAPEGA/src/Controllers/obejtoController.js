@@ -1,9 +1,9 @@
     import conn from "../Config/conn.js";
     import { v4 as uuidv4 } from "uuid";
     import getToken from "../helpers/get-token.js";
-    // import getUserByToken from "../helpers/get-user-token.js";
-    import getUserByToken from "./usuarioController.js";
-import { request, response } from "express";
+    import getUserByToken from "../helpers/get-user-token.js";
+    //import getUserByToken from "../helpers/get-user-token.js"; /// ./usuarioController.js
+    import { request, response } from "express";
 
     export const create = async (request, response) => {
     const { nome, peso, cor, descricao } = request.body;
@@ -86,7 +86,7 @@ import { request, response } from "express";
 
     export const getAllObjectUser = async (request, response)=>{
         try{
-           const token = getToken(resquest)
+           const token = getToken(request)
            const user = await getUserByToken(token)
 
            const usuarioId = user.usuario_id
